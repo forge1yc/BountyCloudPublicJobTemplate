@@ -1,0 +1,21 @@
+FROM ubuntu:16.04
+RUN apt-get update
+
+RUN apt-get install openssh-server vim
+RUN mkdir -p /var/run/sshd
+RUN mkdir /usr/sbin/sshd -D &
+RUN netstat -tunlp
+RUN sed -ri 's/session required pam_loginuid.so/#session required pam_loginuid.so/g'  /etc/pam.d/sshd
+RUN mkdir /root/.ssh
+RUN touch /root/.ssh authorized_keys
+
+
+
+
+RUN apt-get install -y ca-certificates
+RUN update-ca-certificates
+
+
+COPY bin/linux_bounty_email /bin/
+#COPY ssh/id_rsa.pub /root/.ssh
+CMD ["/bin/linux_bounty_email"]
